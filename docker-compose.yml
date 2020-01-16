@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+        db:
+                image: mysql:5.7
+                volumes:
+                        - db_data:/var/lib/mysql
+                restart: always
+                environment:
+                        MYSQL_HOST: localhost
+                        MYSQL_PORT: 3306
+                        MYSQL_USERNAME: pdb
+                        MYSQL_PASSWORD: pdbpass
+                        MYSQL_ROOT_PASSWORD: pdbpass
+                        MYSQL_DATABASE: pdb
+        o:
+                depends_on:
+                        - db
+                image: campbellsoftwaresolutions/osticket
+                volumes:
+                        - log_nginx:/var/log/nginx
+                ports:
+                        - "8080:80"
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: pdbpass
+                        MYSQL_USER: pdb
+                        MYSQL_PASSWORD: pdbpass
+                        MYSQL_DATABASE: pdb
+                        MYSQL_PORT: 3306
+                        MYSQL_HOST: localhost
+volumes:
+        db_data: {}
+        log_nginx: {}
